@@ -1,7 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Modal, Select } from 'antd';
+import { Button, message, Modal, Select } from 'antd';
+// import showMessage from './showMessage';
+import '@ant-design/v5-patch-for-react-19';
+import *as self from './modalWrapper'
 
 const ModalWrapper = ({ open, setOpen }) => {
     const [loading, setLoading] = useState(false);
@@ -9,15 +12,13 @@ const ModalWrapper = ({ open, setOpen }) => {
 
     // Fetch memes when modal opens
     useEffect(() => {
-        if (open) {
-            axios.get("https://api.imgflip.com/get_memes")
-                .then((response) => {
-                    if (response.data.success) {
-                        setMemes(response.data.data.memes);
-                    }
-                })
-                .catch((error) => console.error("Error fetching memes:", error));
-        }
+        // if (open) {
+        //     axios.get("https://api.imgflip.com/get_memes")
+        //         .then((response) => {
+        //             if (response.data.success) {
+        //                 setMemes(response.data.data.memes);
+        self.showMessage("Success", "success");
+        // }
     }, [open]);
 
     const handleOk = () => {
@@ -29,6 +30,7 @@ const ModalWrapper = ({ open, setOpen }) => {
     };
 
     const handleCancel = () => {
+        showMessage("Cancelled", "warning");
         setOpen(false);
     };
 
@@ -48,17 +50,27 @@ const ModalWrapper = ({ open, setOpen }) => {
                     </Button>,
                 ]}
             >
-                <Select
+                {/* <Select
                     style={{ width: "100%" }}
                     placeholder="Choose a meme"
                     options={memes.map((meme) => ({
                         value: meme.id,
                         label: meme.name
                     }))}
-                />
+                /> */}
             </Modal>
         </>
     );
 };
 
+import { message } from 'antd'
+export function showMessage(content, type) {
+
+    message[type](content)
+
+}
+
+
+
 export default ModalWrapper;
+
